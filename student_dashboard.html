@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" type="text/css" href="dashboardstyle.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<!-- Fixed Navbar -->
+<div class="header">
+    <img src="https://i.postimg.cc/2SL6Rd2d/collegelogo.jpg" alt="College Logo" class="logo">
+    <div class="college-name">
+        <h1>SAGI RAMA KRISHNAM RAJU ENGINEERING COLLEGE</h1>
+        <h3>(Autonomous)</h3>
+        <p>Recognised as Scientific and Industrial Research Organisation</p>
+    </div>
+    <div class="student-profile">
+        <img src="https://i.postimg.cc/7LCRwVRV/student.jpg" alt="Student Photo">
+        <p>Olivia</p>
+    </div>
+</div>
+
+<!-- Dashboard Container -->
+<div class="container dashboard-container">
+    <div class="chart-container">
+        <canvas id="attendanceChart"></canvas>
+    </div>
+    <div class="table-container">
+        <h3>Attendance Record (Last 10 Days)</h3>
+        <table id="attendanceTable">
+            <tr>
+                <th>Date</th>
+                <th>P1</th>
+                <th>P2</th>
+                <th>P3</th>
+                <th>P4</th>
+                <th>P5</th>
+                <th>P6</th>
+                <th>P7</th>
+                <th>P8</th>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<!-- Chart & Table Script -->
+<script>
+    const attendanceData = [
+        { date: "March 11", periods: ["P", "A", "P", "P", "P", "P", "P", "A"] },
+        { date: "March 12", periods: ["P", "P", "P", "P", "P", "A", "P", "A"] },
+        { date: "March 13", periods: ["P", "P", "P", "A", "P", "P", "P", "P"] },
+        { date: "March 14", periods: ["A", "A", "P", "P", "P", "P", "P", "P"] },
+        { date: "March 15", periods: ["P", "P", "A", "P", "P", "P", "A", "P"] },
+    ];
+
+    const table = document.getElementById("attendanceTable");
+    attendanceData.forEach(entry => {
+        let row = `<tr><td>${entry.date}</td>`;
+        entry.periods.forEach(period => {
+            row += `<td class="${period === 'P' ? 'present' : 'absent'}">${period}</td>`;
+        });
+        row += "</tr>";
+        table.innerHTML += row;
+    });
+
+    var ctx = document.getElementById('attendanceChart').getContext('2d');
+    var attendanceChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Present', 'Absent'],
+            datasets: [{
+                data: [80, 20],
+                backgroundColor: ['green', 'red']
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: function(tooltipItem) {
+                            return tooltipItem.label + ': ' + tooltipItem.raw + '%';
+                        }
+                    }
+                }
+            }
+        }
+    });
+</script>
+</body>
+</html>
